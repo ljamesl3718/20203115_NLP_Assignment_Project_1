@@ -1,0 +1,358 @@
+:root {
+  --paper: #f6efe3;
+  --paper-deep: #eadfc6;
+  --ink: #181817;
+  --body: #314047;
+  --muted: #68757b;
+  --line: #1c1d1c;
+  --green: #2d9a67;
+  --green-deep: #1e6545;
+  --gold: #d4a543;
+  --coral: #e17a63;
+  --blue: #5b73c5;
+  --panel: rgba(255, 251, 244, 0.86);
+  --shadow: 0 18px 40px rgba(46, 39, 20, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top right, rgba(45, 154, 103, 0.14), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(225, 122, 99, 0.14), transparent 30%),
+    linear-gradient(180deg, #f9f3e8 0%, #f3eadb 100%);
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.page-shell {
+  width: min(1400px, calc(100vw - 40px));
+  margin: 24px auto 40px;
+}
+
+.hero,
+.workspace {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.6fr 0.9fr;
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.hero-copy,
+.hero-panel,
+.input-column,
+.result-card,
+.warning-box {
+  background: var(--panel);
+  border: 1.5px solid rgba(28, 29, 28, 0.22);
+  border-radius: 26px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(4px);
+}
+
+.hero-copy {
+  padding: 34px 36px;
+}
+
+.hero-panel {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 244, 0.95), rgba(234, 223, 198, 0.72));
+}
+
+.eyebrow,
+.panel-stamp,
+.badge,
+label span {
+  font-family: "Aptos Mono", "Consolas", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--green-deep);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 4vw, 4.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.hero-text,
+.hero-panel p,
+.summary-text,
+.field textarea,
+.field input,
+.field select,
+.result-list,
+.matches-board,
+.warning-box {
+  color: var(--body);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.hero-text {
+  max-width: 720px;
+  margin: 18px 0 0;
+  font-size: 1.1rem;
+}
+
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.hero-pills span,
+.panel-stamp,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 29, 28, 0.18);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.panel-stamp {
+  align-self: flex-start;
+  background: rgba(45, 154, 103, 0.12);
+  color: var(--green-deep);
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 0.98fr 1.22fr;
+  gap: 22px;
+}
+
+.input-column {
+  padding: 22px;
+}
+
+.output-column {
+  display: grid;
+  gap: 16px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+label span {
+  color: var(--green-deep);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  border-radius: 18px;
+  border: 1.5px solid rgba(28, 29, 28, 0.18);
+  background: rgba(255, 255, 255, 0.82);
+  padding: 14px 16px;
+  resize: vertical;
+}
+
+.field textarea:focus,
+.field input:focus,
+.field select:focus,
+button:focus {
+  outline: 2px solid rgba(45, 154, 103, 0.28);
+  outline-offset: 2px;
+}
+
+button {
+  border: 1.5px solid rgba(28, 29, 28, 0.18);
+  border-radius: 16px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button.primary {
+  background: linear-gradient(135deg, var(--green), #57b783);
+  color: white;
+}
+
+button.secondary {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+}
+
+.badge {
+  color: var(--green-deep);
+}
+
+.warning-box {
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(225, 122, 99, 0.13);
+}
+
+.hidden {
+  display: none;
+}
+
+.result-card {
+  padding: 18px 20px;
+}
+
+.spotlight {
+  background:
+    linear-gradient(135deg, rgba(255, 251, 244, 0.94), rgba(234, 223, 198, 0.72));
+}
+
+.summary-text {
+  margin: 12px 0 0;
+  font-size: 1.05rem;
+}
+
+.result-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.result-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.result-list li {
+  margin-bottom: 10px;
+}
+
+.matches-board {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.match-card {
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.76);
+  border-left: 6px solid var(--gold);
+}
+
+.match-card h4 {
+  margin: 0 0 8px;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 1rem;
+}
+
+.match-card p {
+  margin: 6px 0 0;
+  color: var(--body);
+}
+
+.match-note {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 1080px) {
+  .hero,
+  .workspace,
+  .two-up {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100vw - 20px, 1400px);
+    margin-top: 10px;
+  }
+
+  .hero-copy,
+  .hero-panel,
+  .input-column,
+  .result-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toolbar {
+    width: 100%;
+  }
+
+  .toolbar button {
+    flex: 1;
+  }
+}
+

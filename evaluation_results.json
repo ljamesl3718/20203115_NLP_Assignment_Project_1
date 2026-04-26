@@ -1,0 +1,55 @@
+{
+  "summary": {
+    "case_count": 3,
+    "mean_latency_ms": 2.77,
+    "mean_average_match_score": 4.79,
+    "mean_requirements_count": 5,
+    "mean_gaps_count": 3,
+    "all_cases_produced_bullets": true,
+    "all_cases_produced_cover_points": true
+  },
+  "cases": [
+    {
+      "case_id": "case_1_product_ops_en",
+      "goal": "internship application for a product or business role",
+      "language": "en",
+      "backend": "heuristic",
+      "latency_ms": 4.78,
+      "requirements_count": 5,
+      "matches_count": 4,
+      "gaps_count": 3,
+      "resume_bullets_count": 3,
+      "cover_points_count": 3,
+      "warnings_count": 0,
+      "average_match_score": 4.87
+    },
+    {
+      "case_id": "case_2_marketing_ko",
+      "goal": "콘텐츠 마케팅 인턴 지원서 작성",
+      "language": "ko",
+      "backend": "heuristic",
+      "latency_ms": 1.95,
+      "requirements_count": 5,
+      "matches_count": 4,
+      "gaps_count": 3,
+      "resume_bullets_count": 3,
+      "cover_points_count": 3,
+      "warnings_count": 0,
+      "average_match_score": 5.76
+    },
+    {
+      "case_id": "case_3_data_ops_en",
+      "goal": "data operations internship application",
+      "language": "en",
+      "backend": "heuristic",
+      "latency_ms": 1.57,
+      "requirements_count": 5,
+      "matches_count": 4,
+      "gaps_count": 3,
+      "resume_bullets_count": 3,
+      "cover_points_count": 3,
+      "warnings_count": 0,
+      "average_match_score": 3.75
+    }
+  ]
+}

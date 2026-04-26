@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "case_1_product_ops_en",
+    "goal": "internship application for a product or business role",
+    "mode": "heuristic",
+    "resume_text": "Name: Minseo Kim\nEducation: 3rd-year student in Business Administration at a university in Seoul.\nExperience:\n- Built a small campus event registration webpage with teammates and coordinated the schedule and copy.\n- Completed a marketing analytics course project using survey data and presentation slides.\n- Wrote club recruitment posts and weekly newsletter content for a student startup club.\nStrengths:\n- Comfortable organizing information, writing clearly, and working across teams.\n- Interested in product, operations, and business internship roles.",
+    "activity_text": "- Student startup club operations lead for one semester; planned events, checked attendance, and gathered feedback after each session.\n- Conducted a small user survey for a class project and summarized findings into slides for a final presentation.\n- Helped edit portfolio descriptions for two teammates so their project roles and outcomes were easier to understand.\n- Used Excel and Google Sheets to clean basic data, organize responses, and prepare charts.",
+    "job_posting_text": "Business / Product Operations Intern\n\nResponsibilities\n- Support product and operations projects by organizing information and coordinating tasks across internal stakeholders.\n- Analyze user feedback and summarize insights in a clear, structured format.\n- Prepare documents, slides, and short written updates for the team.\n\nQualifications\n- Strong written communication skills.\n- Ability to work with spreadsheets and basic data analysis.\n- Interest in product thinking, user problems, and execution details.\n- Experience from school projects, clubs, or internships is welcome."
+  },
+  {
+    "case_id": "case_2_marketing_ko",
+    "goal": "콘텐츠 마케팅 인턴 지원서 작성",
+    "mode": "heuristic",
+    "resume_text": "이름: 박서연\n학력: 서울 소재 대학교 미디어커뮤니케이션학과 4학년\n경험:\n- 학과 프로젝트에서 브랜드 SNS 콘텐츠 기획안을 작성했습니다.\n- 학생회 홍보팀에서 카드뉴스 문구와 행사 소개 글을 썼습니다.\n- 교내 인터뷰 기사 초안을 정리하고 편집한 경험이 있습니다.\n강점:\n- 짧은 문장을 명확하게 쓰는 편입니다.\n- 사용자 반응을 보며 콘텐츠 방향을 조정하는 데 관심이 있습니다.",
+    "activity_text": "- 학교 축제 홍보 콘텐츠를 주 2회 업로드하며 반응을 기록했습니다.\n- 동아리 모집용 인스타그램 문구를 작성하고 게시물 성과를 비교했습니다.\n- 팀 발표 자료의 스토리 흐름과 문장 표현을 다듬는 역할을 맡았습니다.",
+    "job_posting_text": "콘텐츠 마케팅 인턴\n\n주요 업무\n- SNS 및 디지털 채널용 콘텐츠 아이디어를 기획합니다.\n- 게시물 성과와 사용자 반응을 정리하여 간단한 인사이트를 도출합니다.\n- 캠페인 관련 문서와 짧은 카피를 작성합니다.\n\n자격 요건\n- 글쓰기와 커뮤니케이션 역량이 좋은 분\n- 콘텐츠 성과를 수치로 정리할 수 있는 분\n- 협업과 일정 관리가 가능한 분"
+  },
+  {
+    "case_id": "case_3_data_ops_en",
+    "goal": "data operations internship application",
+    "mode": "heuristic",
+    "resume_text": "Name: Jiyoon Lee\nEducation: 4th-year student in Statistics.\nExperience:\n- Cleaned survey data and built summary charts for a capstone project.\n- Supported a student research team by organizing spreadsheets and documenting weekly updates.\n- Coordinated team tasks and deadlines during a semester-long analytics project.",
+    "activity_text": "- Used Python and spreadsheets for simple data cleaning.\n- Presented findings to classmates with slides and written summary notes.\n- Helped maintain a shared tracker for deadlines and project status.",
+    "job_posting_text": "Data Operations Intern\n\nResponsibilities\n- Maintain structured datasets and support recurring reporting tasks.\n- Document operational issues and communicate status updates clearly.\n- Coordinate across stakeholders to keep execution on track.\n\nQualifications\n- Familiarity with spreadsheets and basic data processing.\n- Strong written communication.\n- Detail-oriented mindset and reliability."
+  }
+]
