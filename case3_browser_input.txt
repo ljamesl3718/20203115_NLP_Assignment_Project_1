@@ -1,0 +1,29 @@
+Target goal
+data operations internship application
+
+Base resume / profile
+Name: Jiyoon Lee
+Education: 4th-year student in Statistics.
+
+Experience:
+- Cleaned survey data and built summary charts for a capstone project.
+- Supported a student research team by organizing spreadsheets and documenting weekly updates.
+- Coordinated team tasks and deadlines during a semester-long analytics project.
+
+Activity bank / extra notes
+- Used Python and spreadsheets for simple data cleaning.
+- Presented findings to classmates with slides and written summary notes.
+- Helped maintain a shared tracker for deadlines and project status.
+
+Job posting
+Data Operations Intern
+
+Responsibilities
+- Maintain structured datasets and support recurring reporting tasks.
+- Document operational issues and communicate status updates clearly.
+- Coordinate across stakeholders to keep execution on track.
+
+Qualifications
+- Familiarity with spreadsheets and basic data processing.
+- Strong written communication.
+- Detail-oriented mindset and reliability.
