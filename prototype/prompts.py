@@ -19,11 +19,15 @@ Schema:
       "requirement": "string",
       "evidence": "string",
       "note": "string",
-      "score": 0.0
+      "score": 0.0,
+      "confidence": "strong, medium, or weak",
+      "keyword_coverage": 0.0
     }}
   ],
   "evidence_gaps": ["string", "string", "string"],
-  "checklist": ["string", "string", "string", "string"]
+  "checklist": ["string", "string", "string", "string"],
+  "overall_fit_score": 0.0,
+  "coverage_rate": 0.0
 }}
 
 Rules:
@@ -33,6 +37,8 @@ Rules:
 - Keep the tailored summary to 2 sentences maximum.
 - Keep resume_bullets and cover_letter_points concise and immediately reusable.
 - evidence_matches should explain how a real piece of evidence supports one requirement.
+- confidence should reflect how strongly the evidence supports the requirement.
+- coverage_rate is the fraction of key requirements with strong or medium evidence.
 - If evidence is weak, say so clearly in note and surface it in evidence_gaps.
 
 Target goal:
@@ -54,4 +60,3 @@ OPENAI_INSTRUCTIONS = (
     "You help Korean undergraduates match real experiences to a specific job posting. "
     "Output must be valid JSON only, and you must stay grounded in the provided materials."
 )
-

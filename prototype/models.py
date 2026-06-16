@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any
 
 
-VALID_MODES = {"auto", "heuristic", "openai"}
+VALID_MODES = {"auto", "embedding", "heuristic", "openai"}
 
 
 @dataclass
@@ -13,6 +13,8 @@ class RequirementMatch:
     evidence: str
     note: str
     score: float = 0.0
+    confidence: str = "weak"
+    keyword_coverage: float = 0.0
 
 
 @dataclass
@@ -61,10 +63,11 @@ class GenerationResponse:
     evidence_matches: list[RequirementMatch]
     evidence_gaps: list[str]
     checklist: list[str]
+    overall_fit_score: float = 0.0
+    coverage_rate: float = 0.0
     warnings: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["evidence_matches"] = [asdict(item) for item in self.evidence_matches]
         return payload
-

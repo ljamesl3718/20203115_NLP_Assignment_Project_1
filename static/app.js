@@ -9,6 +9,8 @@ const elements = {
   statusBadge: document.getElementById("status-badge"),
   warningBox: document.getElementById("warning-box"),
   summary: document.getElementById("tailored_summary"),
+  fitScore: document.getElementById("fit_score"),
+  coverageRate: document.getElementById("coverage_rate"),
   requirementsList: document.getElementById("requirements_list"),
   gapsList: document.getElementById("gaps_list"),
   resumeBullets: document.getElementById("resume_bullets"),
@@ -64,6 +66,14 @@ function renderMatches(matches) {
     note.textContent = match.note;
     card.appendChild(note);
 
+    const meta = document.createElement("p");
+    meta.className = "match-meta";
+    const confidence = match.confidence || "weak";
+    const score = Number(match.score || 0).toFixed(2);
+    const coverage = Math.round(Number(match.keyword_coverage || 0) * 100);
+    meta.textContent = `${confidence.toUpperCase()} · score ${score} · keyword coverage ${coverage}%`;
+    card.appendChild(meta);
+
     elements.matchesBoard.appendChild(card);
   });
 }
@@ -103,6 +113,8 @@ async function generatePackage() {
   setStatus("Generating");
   renderWarnings([]);
   elements.summary.textContent = "Generating...";
+  elements.fitScore.textContent = "-";
+  elements.coverageRate.textContent = "-";
   try {
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -116,6 +128,8 @@ async function generatePackage() {
 
     setStatus(`${payload.backend} / ${payload.language}${payload.model ? ` / ${payload.model}` : ""}`);
     elements.summary.textContent = payload.tailored_summary || "No summary generated.";
+    elements.fitScore.textContent = Number(payload.overall_fit_score || 0).toFixed(2);
+    elements.coverageRate.textContent = `${Math.round(Number(payload.coverage_rate || 0) * 100)}%`;
     renderList(elements.requirementsList, payload.extracted_requirements);
     renderList(elements.gapsList, payload.evidence_gaps);
     renderList(elements.resumeBullets, payload.resume_bullets);
@@ -132,4 +146,3 @@ async function generatePackage() {
 
 elements.sampleButton.addEventListener("click", loadSample);
 elements.generateButton.addEventListener("click", generatePackage);
-

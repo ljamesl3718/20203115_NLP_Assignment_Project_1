@@ -291,6 +291,32 @@ button.secondary {
   margin-bottom: 10px;
 }
 
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.metric-grid div {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(28, 29, 28, 0.14);
+}
+
+.metric-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.metric-grid strong {
+  font-size: 1.4rem;
+  color: var(--green-deep);
+}
+
 .matches-board {
   display: grid;
   gap: 14px;
@@ -318,6 +344,13 @@ button.secondary {
 .match-note {
   color: var(--muted);
   font-size: 0.92rem;
+}
+
+.match-meta {
+  color: var(--green-deep);
+  font-family: "Aptos Mono", "Consolas", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 @media (max-width: 1080px) {
@@ -354,5 +387,8 @@ button.secondary {
   .toolbar button {
     flex: 1;
   }
-}
 
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

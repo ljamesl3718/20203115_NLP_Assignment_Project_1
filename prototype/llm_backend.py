@@ -69,19 +69,32 @@ def normalize_text_list(value: Any, fallback: list[str], limit: int) -> list[str
     return items[:limit] or fallback[:limit]
 
 
+def confidence_from_score(score: float) -> str:
+    if score >= 5.0:
+        return "strong"
+    if score >= 3.0:
+        return "medium"
+    return "weak"
+
+
 def normalize_matches(value: Any) -> list[RequirementMatch]:
     if not isinstance(value, list):
         return []
     matches: list[RequirementMatch] = []
-    for item in value[:4]:
+    for item in value[:5]:
         if not isinstance(item, dict):
             continue
+        score = float(item.get("score", 0.0) or 0.0)
+        coverage = float(item.get("keyword_coverage", 0.0) or 0.0)
         matches.append(
             RequirementMatch(
                 requirement=str(item.get("requirement", "")).strip(),
                 evidence=str(item.get("evidence", "")).strip(),
                 note=str(item.get("note", "")).strip(),
-                score=float(item.get("score", 0.0) or 0.0),
+                score=score,
+                confidence=str(item.get("confidence", confidence_from_score(score))).strip().lower()
+                or confidence_from_score(score),
+                keyword_coverage=round(max(0.0, min(1.0, coverage)), 2),
             )
         )
     return [match for match in matches if match.requirement and match.evidence]
@@ -126,6 +139,12 @@ def call_openai(request: GenerationRequest) -> GenerationResponse:
 
     output_text = collect_output_text(payload)
     structured = extract_json_object(output_text)
+    matches = normalize_matches(structured.get("evidence_matches"))
+    fallback_fit = round(sum(match.score for match in matches) / len(matches), 2) if matches else 0.0
+    fallback_coverage = round(
+        sum(1 for match in matches if match.confidence in {"strong", "medium"}) / len(matches),
+        2,
+    ) if matches else 0.0
 
     return GenerationResponse(
         backend="openai",
@@ -135,9 +154,10 @@ def call_openai(request: GenerationRequest) -> GenerationResponse:
         tailored_summary=str(structured.get("tailored_summary", "")).strip(),
         resume_bullets=normalize_text_list(structured.get("resume_bullets"), [], 3),
         cover_letter_points=normalize_text_list(structured.get("cover_letter_points"), [], 3),
-        evidence_matches=normalize_matches(structured.get("evidence_matches")),
+        evidence_matches=matches,
         evidence_gaps=normalize_text_list(structured.get("evidence_gaps"), [], 3),
         checklist=normalize_text_list(structured.get("checklist"), [], 4),
+        overall_fit_score=float(structured.get("overall_fit_score", fallback_fit) or fallback_fit),
+        coverage_rate=float(structured.get("coverage_rate", fallback_coverage) or fallback_coverage),
         warnings=[],
     )
-

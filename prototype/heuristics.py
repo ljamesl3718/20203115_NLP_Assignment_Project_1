@@ -148,6 +148,43 @@ def keyword_tokens(text: str) -> list[str]:
     return [token for token in tokenize(text) if token not in stopwords and len(token) > 1]
 
 
+def compute_idf(documents: list[str]) -> dict[str, float]:
+    token_sets = [set(keyword_tokens(document)) for document in documents if document.strip()]
+    total = len(token_sets) or 1
+    document_frequency: Counter[str] = Counter()
+    for token_set in token_sets:
+        document_frequency.update(token_set)
+    return {
+        token: math.log((total + 1) / (frequency + 1)) + 1.0
+        for token, frequency in document_frequency.items()
+    }
+
+
+def tfidf_vector(text: str, idf: dict[str, float]) -> dict[str, float]:
+    counts = Counter(keyword_tokens(text))
+    return {token: count * idf.get(token, 1.0) for token, count in counts.items()}
+
+
+def cosine_similarity(left: dict[str, float], right: dict[str, float]) -> float:
+    if not left or not right:
+        return 0.0
+    shared = set(left) & set(right)
+    numerator = sum(left[token] * right[token] for token in shared)
+    left_norm = math.sqrt(sum(value * value for value in left.values()))
+    right_norm = math.sqrt(sum(value * value for value in right.values()))
+    if not left_norm or not right_norm:
+        return 0.0
+    return numerator / (left_norm * right_norm)
+
+
+def confidence_from_score(score: float) -> str:
+    if score >= 5.0:
+        return "strong"
+    if score >= 3.0:
+        return "medium"
+    return "weak"
+
+
 def split_lines(text: str) -> list[str]:
     chunks = re.split(r"[\r\n]+|(?<=[.!?])\s+", text)
     results: list[str] = []
@@ -204,9 +241,10 @@ def extract_requirements(job_posting_text: str, limit: int = 5) -> list[str]:
 
     sentence_fallback = [compact_phrase(line) for line in split_lines(job_posting_text) if len(keyword_tokens(line)) >= 3]
     for phrase in sentence_fallback:
-        if phrase.lower() not in seen:
+        key = " ".join(keyword_tokens(phrase)[:5]) or phrase.lower()
+        if key not in seen:
             deduped.append(phrase)
-            seen.add(phrase.lower())
+            seen.add(key)
         if len(deduped) >= limit:
             break
     if len(deduped) < limit:
@@ -230,17 +268,21 @@ def gather_evidence_lines(resume_text: str, activity_text: str) -> list[str]:
     return [combined] if combined else []
 
 
-def score_evidence(requirement: str, evidence_line: str) -> float:
+def score_evidence(requirement: str, evidence_line: str, idf: dict[str, float] | None = None) -> tuple[float, float, float]:
     req_tokens = set(keyword_tokens(requirement))
     evidence_tokens = set(keyword_tokens(evidence_line))
     overlap = len(req_tokens & evidence_tokens)
-    score = overlap * 4.0
+    coverage = overlap / max(len(req_tokens), 1)
+    semantic_score = 0.0
+    if idf is not None:
+        semantic_score = cosine_similarity(tfidf_vector(requirement, idf), tfidf_vector(evidence_line, idf))
+    score = overlap * 2.4 + coverage * 2.0 + semantic_score * 4.0
     if re.search(r"\d", evidence_line):
         score += 1.5
     if any(token in evidence_line.lower() for token in ACTION_HINTS):
         score += 1.0
     score += min(len(evidence_tokens) / 50.0, 1.5)
-    return score
+    return score, coverage, semantic_score
 
 
 def truncate(text: str, limit: int = 120) -> str:
@@ -253,43 +295,57 @@ def truncate(text: str, limit: int = 120) -> str:
 def rank_matches(requirements: list[str], evidence_lines: list[str]) -> list[RequirementMatch]:
     matches: list[RequirementMatch] = []
     used_lines: set[int] = set()
+    idf = compute_idf(requirements + evidence_lines)
     for requirement in requirements:
         scored = []
         for index, line in enumerate(evidence_lines):
-            base_score = score_evidence(requirement, line)
+            base_score, coverage, semantic_score = score_evidence(requirement, line, idf)
             penalty = 0.8 if index in used_lines else 0.0
-            scored.append((base_score - penalty, index, line))
+            scored.append((base_score - penalty, index, line, coverage, semantic_score))
         scored.sort(reverse=True, key=lambda item: item[0])
         if scored:
-            best_score, best_index, best_line = scored[0]
+            best_score, best_index, best_line, coverage, semantic_score = scored[0]
             used_lines.add(best_index)
             matches.append(
                 RequirementMatch(
                     requirement=requirement,
                     evidence=truncate(best_line, 140),
-                    note=build_note(requirement, best_line, best_score),
+                    note=build_note(requirement, best_line, best_score, semantic_score),
                     score=round(best_score, 2),
+                    confidence=confidence_from_score(best_score),
+                    keyword_coverage=round(coverage, 2),
                 )
             )
     return matches
 
 
-def build_note(requirement: str, evidence: str, score: float) -> str:
+def build_note(requirement: str, evidence: str, score: float, semantic_score: float = 0.0) -> str:
     req_tokens = set(keyword_tokens(requirement))
     evidence_tokens = set(keyword_tokens(evidence))
     overlap = sorted(req_tokens & evidence_tokens)
     if overlap:
         overlap_preview = ", ".join(overlap[:3])
-        return f"Shared signal: {overlap_preview}."
-    if score >= 2.5:
-        return "Relevant experience exists, but the wording should be tied to the job post more clearly."
+        return f"{confidence_from_score(score).title()} match. Shared signal: {overlap_preview}."
+    if semantic_score >= 0.18:
+        return "Potential semantic match, but the wording should be tied to the job post more clearly."
+    if score >= 3.0:
+        return "Relevant experience exists, but the evidence needs more explicit wording."
     return "Weak evidence match. This requirement may need stronger proof or a new example."
 
 
 def extract_gaps(requirements: list[str], matches: list[RequirementMatch], language: str) -> list[str]:
-    gaps = [match.requirement for match in matches if match.score < 2.5]
-    missing = requirements[len(gaps) :]
-    selected = (gaps + missing)[:3]
+    weak_requirements = [match.requirement for match in matches if match.confidence == "weak"]
+    matched_requirements = {match.requirement for match in matches}
+    missing_requirements = [requirement for requirement in requirements if requirement not in matched_requirements]
+    selected: list[str] = []
+    seen = set()
+    for item in weak_requirements + missing_requirements:
+        key = item.lower()
+        if key not in seen:
+            selected.append(item)
+            seen.add(key)
+        if len(selected) >= 3:
+            break
     if selected:
         return selected
     if language == "ko":
@@ -375,6 +431,11 @@ def generate_with_heuristics(request: GenerationRequest) -> GenerationResponse:
     evidence_lines = gather_evidence_lines(request.resume_text, request.activity_text)
     matches = rank_matches(requirements, evidence_lines)
     gaps = extract_gaps(requirements, matches, language)
+    overall_fit_score = round(sum(match.score for match in matches) / len(matches), 2) if matches else 0.0
+    coverage_rate = round(
+        sum(1 for match in matches if match.confidence in {"strong", "medium"}) / max(len(requirements), 1),
+        2,
+    )
     response = GenerationResponse(
         backend="heuristic",
         language=language,
@@ -383,9 +444,11 @@ def generate_with_heuristics(request: GenerationRequest) -> GenerationResponse:
         tailored_summary=build_summary(matches, request, language),
         resume_bullets=build_resume_bullets(matches, language),
         cover_letter_points=build_cover_letter_points(matches, gaps, language),
-        evidence_matches=matches[:4],
+        evidence_matches=matches,
         evidence_gaps=gaps,
         checklist=build_checklist(gaps, language),
+        overall_fit_score=overall_fit_score,
+        coverage_rate=coverage_rate,
         warnings=[],
     )
     if not evidence_lines:

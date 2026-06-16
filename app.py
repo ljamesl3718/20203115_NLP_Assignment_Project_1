@@ -6,6 +6,7 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from prototype.embedding_backend import embedding_backend_available, embedding_model_name
 from prototype.models import GenerationRequest
 from prototype.service import generate_application_package
 
@@ -42,6 +43,8 @@ class PrototypeHandler(SimpleHTTPRequestHandler):
                 {
                     "status": "ok",
                     "openai_key_present": bool(os.getenv("OPENAI_API_KEY")),
+                    "embedding_backend_present": embedding_backend_available(),
+                    "embedding_model": embedding_model_name(),
                     "sample_ready": SAMPLE_DIR.exists(),
                 }
             )
@@ -92,4 +95,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -1,6 +1,6 @@
-#20203115_NLP_Assignment01_STEP_2
+#20203115_NLP_Assignment_02
 
-##What to download
+# What to download
 
 There are 2 options;
 
@@ -17,6 +17,7 @@ If you download files manually, these are the required files and folders for run
 - `prototype/`
 - `static/`
 - `sample_data/`
+- `requirements.txt`
 
 ## How to run
 
@@ -25,6 +26,7 @@ If you download files manually, these are the required files and folders for run
 ```powershell
 git clone https://github.com/ljamesl3718/20203115_NLP_Assignment_Project_1.git
 cd 20203115_NLP_Assignment_Project_1\output\step2_prototype
+pip install -r requirements.txt
 python app.py
 ```
 
@@ -42,6 +44,7 @@ Then open:
 6. Run:
 
 ```powershell
+pip install -r requirements.txt
 python app.py
 ```
 
@@ -53,3 +56,7 @@ Then open:
 
 - The app runs locally in the browser.
 - `Load Sample` can be used to test the prototype quickly after the server starts.
+- The upgraded prototype uses a local multilingual SentenceTransformer model for AI-based evidence matching.
+- Default local model: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
+- Set `LOCAL_EMBEDDING_MODEL` to use a different sentence-transformer model.
+- Set `LOCAL_EMBEDDING_LOCAL_FILES_ONLY=1` to force the app to use the cached model without contacting Hugging Face.
