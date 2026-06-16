@@ -25,7 +25,7 @@ If you download files manually, these are the required files and folders for run
 
 ```powershell
 git clone https://github.com/ljamesl3718/20203115_NLP_Assignment_Project_1.git
-cd 20203115_NLP_Assignment_Project_1\output\step2_prototype
+cd 20203115_NLP_Assignment_Project_1
 pip install -r requirements.txt
 python app.py
 ```
